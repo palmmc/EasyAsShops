@@ -1,0 +1,21 @@
+[build-system]
+requires = ["hatchling<=1.18.0"]  
+build-backend = "hatchling.build"
+
+[project]
+name = "endstone_easyasshops"
+version = "0.1.10"
+dependencies = []
+authors = [
+    { name = "palm1" },
+]
+description = "Endstone Shops Plugin for the EasyAs suite."
+readme = "README.md"
+license = { file = "LICENSE" }
+keywords = ["endstone", "easyas", "shops", "economy", "plugin", "server"]
+
+[project.urls]
+Homepage = ""
+
+[project.entry-points."endstone"]
+easyasshops = "endstone_easyasshops:EasyAsShops"
