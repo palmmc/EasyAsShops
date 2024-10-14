@@ -12,12 +12,12 @@ A plugin for [Endstone](https://github.com/EndstoneMC/endstone) that allows you 
 
 # Installation
 1) Download [**EconomyPilot**](https://github.com/legitbox/Economy-Pilot) (without it, this plugin will not work).
-2) Download the latest [release](https://github.com/palmmc/EasyAsShops/releases).
+2) Download the latest [release](../../releases).
 3) Drag and drop both files ending with `.whl` into your Endstone plugin folder.
 4) Restart or reload your server. Enjoy!
 
 ### Demo
-<img src="https://github.com/palmmc/EasyAsShops/blob/main/images/shopdemo.gif?raw=true">
+<img src="./images/shopdemo.gif?raw=true">
 
 # Features
 - ## Shop UI
@@ -51,7 +51,7 @@ A plugin for [Endstone](https://github.com/EndstoneMC/endstone) that allows you 
 1) For more advanced users, a more efficient approach is to edit the JSON directly.
 To start, navigate to your `/bedrock_server/config/` folder; the `/config/` folder should be in the same directory as your `/plugins/` folder.
 2) Open `shop.json` in your choice of text editor. You don't need anything fancy; Notepad will do.
-3) Begin editing. Refer to the [Wiki](https://github.com/palmmc/EasyAsShops/wiki/Editing-with-JSON) for available arguments.
+3) Begin editing. Refer to the [Wiki](../../wiki/Editing-with-JSON) for available arguments.
 Once done, save the file and reload/restart your server for the changes to take effect.
 
 ### 🥳 Congratulations!
@@ -78,5 +78,5 @@ Placeholder Support|🔷
 
 # Feedback
 It's always possible that you will experience issues with this plugin, or have suggestions on how it can be improved.
-When that happens, please create an [Issue](https://github.com/palmmc/EasyAsShops/issues), so I can get to it when I have the chance!
+When that happens, please create an [Issue](../../issues), so I can get to it when I have the chance!
 I hope you enjoy using this plugin!
