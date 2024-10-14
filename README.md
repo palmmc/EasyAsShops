@@ -8,7 +8,7 @@
 </div>
 
 # EasyAsShops
-A plugin that allows you to setup a simple server shop without any programming!
+A plugin for [Endstone](https://github.com/EndstoneMC/endstone) that allows you to setup a simple server shop without any programming!
 
 # Installation
 1) Download [**EconomyPilot**](https://github.com/legitbox/Economy-Pilot) (without it, this plugin will not work).
