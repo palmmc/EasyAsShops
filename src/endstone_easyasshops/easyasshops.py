@@ -28,22 +28,26 @@ class EasyAsShops(Plugin):
         "resetshop": {
             "description": "Resets the shop configuration to default.",
             "usages": ["/resetshop"],
-            "permissions": ["easyas.command.admin"],
+            "permissions": ["easyas.command.resetshop"],
         },
         "editshop": {
             "description": "Opens the shop editor.",
             "usages": ["/editshop"],
-            "permissions": ["easyas.command.admin"],
+            "permissions": ["easyas.command.editshop"],
         },
     }
 
     permissions = {
-        "easyas.command.default": {
-            "description": "Allow default players to access.",
+        "easyas.command.shop": {
+            "description": "Shop command permission.",
             "default": True,
         },
-        "easyas.command.admin": {
-            "description": "Allow only admins to access.",
+        "easyas.command.resetshop": {
+            "description": "Reset shop command permission.",
+            "default": "op",
+        },
+        "easyas.command.editshop": {
+            "description": "Edit shop command permission.",
             "default": "op",
         },
     }

@@ -36,24 +36,24 @@ def error_custom(player: Player, message: str):
 """
 Format:
     {
-        "title": string, // Form title.
-        "content": string, // Form description.
-        "categories": [ // List of categories.
+        "title": string, # Form title.
+        "content": string, # Form description.
+        "categories": [ # List of categories.
             {
-                "title": string, // Display title for category.
-                "icon": string // Path to icon image for category.
-                "items": [ // List of items.
+                "title": string, # Display title for category.
+                "icon": string # Path to icon image for category.
+                "items": [ # List of items.
                     {
-                        "item": string, // Item identifier.
-                        "title": string, // Display name for item.
-                        "price": int, // Price of item.
-                        "value": int, // Sell price of an item.
-                        "category": string, // Category identifier.
-                        "icon": string // Path to icon image for item.
+                        "item": string, # Item identifier.
+                        "title": string, # Display name for item.
+                        "price": int, # Price of item.
+                        "value": int, # Sell price of an item.
+                        "category": string, # Category identifier.
+                        "icon": string # Path to icon image for item.
                     },
                     ...
                 ],
-                "subcategories"?: [ // Optional list of subcategories.
+                "subcategories"?: [ # Optional list of subcategories.
                     {
                         ...
                     }
@@ -80,55 +80,13 @@ default_data = {
                     "category": "blocks",
                     "icon": "textures/blocks/stone.png",
                 },
-            ],
-            "subcategories": [
                 {
-                    "title": "Wood",
+                    "item": "minecraft:oak_log",
+                    "title": "Oak Log",
+                    "price": 10,
+                    "value": 0,
+                    "category": "blocks",
                     "icon": "textures/blocks/log_oak.png",
-                    "items": [
-                        {
-                            "item": "minecraft:oak_log",
-                            "title": "Oak Log",
-                            "price": 15,
-                            "category": "wood",
-                            "icon": "textures/blocks/log_oak.png",
-                        },
-                        {
-                            "item": "minecraft:birch_log",
-                            "title": "Birch Log",
-                            "price": 15,
-                            "category": "wood",
-                            "icon": "textures/blocks/log_birch.png",
-                        },
-                        {
-                            "item": "minecraft:spruce_log",
-                            "title": "Spruce Log",
-                            "price": 15,
-                            "category": "wood",
-                            "icon": "textures/blocks/log_spruce.png",
-                        },
-                        {
-                            "item": "minecraft:jungle_log",
-                            "title": "Jungle Log",
-                            "price": 15,
-                            "category": "wood",
-                            "icon": "textures/blocks/log_jungle.png",
-                        },
-                        {
-                            "item": "minecraft:acacia_log",
-                            "title": "Acacia Log",
-                            "price": 15,
-                            "category": "wood",
-                            "icon": "textures/blocks/log_acacia.png",
-                        },
-                        {
-                            "item": "minecraft:dark_oak_log",
-                            "title": "Dark Oak Log",
-                            "price": 15,
-                            "category": "wood",
-                            "icon": "textures/blocks/log_big_oak.png",
-                        },
-                    ],
                 },
             ],
         },
@@ -595,8 +553,8 @@ def add_item(player: Player, category) -> None:
         controls=[
             TextInput("Item", "minecraft:stone"),
             TextInput("Title", "Display Title"),
-            TextInput("Price\n§7(Use 0 to make it unpurchasable)", "0"),
-            TextInput("Value\n§7(Use 0 to make it unsellable)", "0"),
+            TextInput("Price\n§7(Use 0 to make it unpurchasable)", "0", "0"),
+            TextInput("Value\n§7(Use 0 to make it unsellable)", "0", "0"),
             TextInput("Icon", "textures/.../___.png"),
         ],
         on_submit=lambda p=player, r=str: add_item_submit(p, category, json.loads(r)),
@@ -617,6 +575,7 @@ def add_item_submit(player: Player, category, result) -> None:
         }
         if item["value"] == 0:
             item.pop("value")
+        category["items"].append(item)
         write_shop_config(shopData)
         enter_category(player, category)
         send_custom(player, f"§aItem §e{result[1]} §ahas been added.")
