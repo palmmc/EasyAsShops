@@ -22,7 +22,7 @@ class EasyAsShops(Plugin):
             "description": "Opens the server shop.",
             "usages": ["/shop"],
             "aliases": ["market"],
-            "permissions": ["easyas.command.default"],
+            "permissions": ["easyas.command.shop"],
         },
         # Admin Commands
         "resetshop": {
