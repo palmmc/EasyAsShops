@@ -15,7 +15,7 @@ license = { file = "LICENSE" }
 keywords = ["endstone", "easyas", "shops", "economy", "plugin", "server"]
 
 [project.urls]
-Homepage = ""
+Homepage = "https://github.com/palmmc/EasyAsShops"
 
 [project.entry-points."endstone"]
 easyasshops = "endstone_easyasshops:EasyAsShops"
