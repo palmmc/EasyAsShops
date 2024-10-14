@@ -1,5 +1,5 @@
-<img src="https://github.com/palmmc/EasyAsShops/blob/main/images/badge.png?raw=true" width="128">
-<a href="https://github.com/legitbox/Economy-Pilot"><img src="https://github.com/palmmc/EasyAsShops/blob/main/images/badge2.png?raw=true" width="256">
+<img src="./images/badge.png?raw=true" width="128">
+<a href="https://github.com/legitbox/Economy-Pilot"><img src="./images/badge2.png?raw=true" width="256">
 <br><br>
 <div align="left">
   
