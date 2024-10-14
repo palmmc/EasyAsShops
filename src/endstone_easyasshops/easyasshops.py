@@ -66,6 +66,9 @@ class EasyAsShops(Plugin):
                     |__/                       |_|      
         {ColorFormat.RESET}"""
         )
+        self.logger.info(
+            f"\n> {ColorFormat.GREEN}{ColorFormat.BOLD}Welcome to EasyAsShops!{ColorFormat.RESET}\n> {ColorFormat.YELLOW}API Version: {self.api_version}{ColorFormat.RESET}\n> {ColorFormat.LIGHT_PURPLE}For help and updates, visit [ {ColorFormat.BLUE}https://github.com/palmmc/EasyAsShops {ColorFormat.LIGHT_PURPLE}]{ColorFormat.RESET}"
+        )
 
     def on_command(self, sender: CommandSender, command: Command, args: list[str]):
         # You can also handle commands here instead of setting an executor in on_enable if you prefer

@@ -4,13 +4,15 @@ from endstone._internal.endstone_python import (
     Dropdown,
     ModalForm,
     Player,
+    Server,
     Slider,
     TextInput,
 )
 import json
 import os
+import re
 
-from .EconomyPilotLite.database_issuer import (
+from .EconomyPilot.database_issuer import (
     server_balance_fetch,
     server_deduct,
     server_pay,
@@ -31,38 +33,56 @@ def error_custom(player: Player, message: str):
     player.send_message(prefix + "§cError: " + message)
 
 
-### DEFAULT SHOP CONFIGURATION ###
+### ECONOMY METHODS ###
 
-"""
-Format:
-    {
-        "title": string, # Form title.
-        "content": string, # Form description.
-        "categories": [ # List of categories.
-            {
-                "title": string, # Display title for category.
-                "icon": string # Path to icon image for category.
-                "items": [ # List of items.
-                    {
-                        "item": string, # Item identifier.
-                        "title": string, # Display name for item.
-                        "price": int, # Price of item.
-                        "value": int, # Sell price of an item.
-                        "category": string, # Category identifier.
-                        "icon": string # Path to icon image for item.
-                    },
-                    ...
-                ],
-                "subcategories"?: [ # Optional list of subcategories.
-                    {
-                        ...
-                    }
-                ]
-            },
-            ...
-        ],
-    }
-"""
+
+def replace_score_placeholders(player: Player, string):
+    server = player.server
+    placeholders = re.findall(r"\{(.*?)\}", string)
+    for placeholder in placeholders:
+        if placeholder.startswith("score:"):
+            objective = placeholder.split(":", 1)[1]
+            value = server.scoreboard.get_objective(objective).get_score(player).value
+            string = re.sub(r"\{" + re.escape(placeholder) + r"\}", str(value), string)
+
+    return string
+
+
+def get_objective_display(player: Player, objective: str):
+    name = player.server.scoreboard.get_objective(objective)
+    if not hasattr(name, "display_name"):
+        name = objective
+    else:
+        name = name.display_name
+    return name
+
+
+def player_balance(player: Player, currency: str):
+    if currency == "default":
+        return int(server_balance_fetch(player.name))
+    else:
+        return player.server.scoreboard.get_objective(currency).get_score(player).value
+
+
+def player_pay(player: Player, currency: str, amount: int):
+    if currency == "default":
+        server_pay(player.name, amount)
+    else:
+        player.server.scoreboard.get_objective(currency).get_score(
+            player
+        ).value += amount
+
+
+def player_deduct(player: Player, currency: str, amount: int):
+    if currency == "default":
+        server_deduct(player.name, -amount)
+    else:
+        player.server.scoreboard.get_objective(currency).get_score(
+            player
+        ).value -= amount
+
+
+### DEFAULT SHOP CONFIGURATION ###
 
 default_data = {
     "title": "Shop",
@@ -79,6 +99,7 @@ default_data = {
                     "value": 5,
                     "category": "blocks",
                     "icon": "textures/blocks/stone.png",
+                    "currency": "default",
                 },
                 {
                     "item": "minecraft:oak_log",
@@ -87,6 +108,7 @@ default_data = {
                     "value": 0,
                     "category": "blocks",
                     "icon": "textures/blocks/log_oak.png",
+                    "currency": "default",
                 },
             ],
         },
@@ -188,7 +210,7 @@ def construct_category(player: Player, category):
                 if "value" in item and item["price"] == 0:
                     price = item["value"]
                 else:
-                    if int(server_balance_fetch(player.name)) < item["price"]:
+                    if player_balance(player, item["currency"]) < item["price"]:
                         priceColor = "§4"
                 buttonList.append(
                     ActionForm.Button(
@@ -210,7 +232,9 @@ shopData = read_shop_config()
 def enter_category(player: Player, category) -> None:
     form = ActionForm(
         title=f"{category['title']}",
-        content=shopData["content"].format(balance=server_balance_fetch(player.name)),
+        content=replace_score_placeholders(player, shopData["content"]).format(
+            balance=server_balance_fetch(player.name)
+        ),
         buttons=construct_category(player, category),
     )
     form.add_button(
@@ -255,7 +279,7 @@ def buy_item(player: Player, item) -> None:
         title=f"Transaction: {item['title']}",
         controls=[
             Slider(
-                "\n§7Use the slider to select an amount, or use the text box below.§f\n\nAmount",
+                f"\n§7Use the slider to select an amount, or use the text box below.§f\n§eCurrency: §f{get_objective_display(player, item["currency"])} §7(§b{player_balance(player, item["currency"])}§7)\n\nAmount",
                 1,
                 64,
                 1,
@@ -274,7 +298,7 @@ def sell_item(player: Player, item) -> None:
         title=f"Transaction: {item['title']}",
         controls=[
             Slider(
-                "\n§7Use the slider to select an amount, or use the text box below.§f\n\nAmount",
+                f"\n§7Use the slider to select an amount, or use the text box below.§f\n§eCurrency: §f{get_objective_display(player, item["currency"])} §7(§b{player_balance(player, item["currency"])}§7)\n\nAmount",
                 1,
                 64,
                 1,
@@ -294,7 +318,7 @@ def confirm_purchase(player: Player, item, result) -> None:
         if int(result[1]) > 1:
             amount = int(result[1])
     server = player.server
-    coins = int(server_balance_fetch(player.name))
+    coins = player_balance(player, item["currency"])
     if item["price"] * amount > coins:
         error_custom(player, "§cYou do not have enough money to buy this item.")
         return
@@ -310,10 +334,11 @@ def confirm_purchase(player: Player, item, result) -> None:
             )
         )
         return
-    server_deduct(player.name, -(item["price"] * amount))
+    player_deduct(player, item["currency"], (item["price"] * amount))
     send_custom(player, f"§bYou have bought §e{item['title']} §8x§7{amount}.")
     send_custom(
-        player, f"§6Your balance is now §e${server_balance_fetch(player.name)}§6."
+        player,
+        f"§6Your balance is now §e${player_balance(player, item["currency"])}§6.",
     )
 
 
@@ -339,10 +364,11 @@ def confirm_sell(player: Player, item, result) -> None:
         error_custom(player, "§cYou do not have enough items to sell.")
         return
     else:
-        server_pay(player.name, item["value"] * amount)
+        player_pay(player, item["currency"], item["value"] * amount)
         send_custom(player, f"§aYou have sold §e{item['title']} §8x§7{amount}.")
         send_custom(
-            player, f"§6Your balance is now §e${server_balance_fetch(player.name)}§6."
+            player,
+            f"§6Your balance is now §e${player_balance(player, item["currency"])}§6.",
         )
 
 
@@ -350,7 +376,7 @@ def open_shop(self: Plugin, player: Player):
     try:
         form = ActionForm(
             title=shopData["title"],
-            content=shopData["content"].format(
+            content=replace_score_placeholders(player, shopData["content"]).format(
                 balance=server_balance_fetch(player.name)
             ),
             buttons=construct_categories(player, shopData["categories"]),
@@ -556,6 +582,7 @@ def add_item(player: Player, category) -> None:
             TextInput("Price\n§7(Use 0 to make it unpurchasable)", "0", "0"),
             TextInput("Value\n§7(Use 0 to make it unsellable)", "0", "0"),
             TextInput("Icon", "textures/.../___.png"),
+            TextInput("Currency", "default", "default"),
         ],
         on_submit=lambda p=player, r=str: add_item_submit(p, category, json.loads(r)),
     )
@@ -572,6 +599,7 @@ def add_item_submit(player: Player, category, result) -> None:
             "value": int(result[3]),
             "category": category["title"],
             "icon": result[4],
+            "currency": result[5],
         }
         if item["value"] == 0:
             item.pop("value")
@@ -668,6 +696,7 @@ def edit_item(player: Player, item, category) -> None:
     else:
         form.add_control(TextInput("Value", "0", "0"))
     form.add_control(TextInput("Icon", item["icon"], item["icon"]))
+    form.add_control(TextInput("Currency", item["currency"], item["currency"]))
     if form:
         player.send_form(form)
 
@@ -679,6 +708,7 @@ def edit_item_submit(player: Player, item, category, result) -> None:
         item["price"] = int(result[2])
         item["value"] = int(result[3])
         item["icon"] = result[4]
+        item["currency"] = result[5]
         if item["value"] == 0:
             item.pop("value")
         write_shop_config(shopData)
