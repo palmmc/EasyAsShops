@@ -1,6 +1,6 @@
-<img src="./images/badge.png?raw=true" width="128">
-<a href="https://github.com/legitbox/Economy-Pilot"><img src="./images/badge2.png?raw=true" width="256">
-<br><br>
+<a href="../../"><img src="./images/badge.png?raw=true" width="128"></a><br>
+<a href="https://github.com/legitbox/Economy-Pilot"><img src="./images/badge2.png?raw=true" width="256"></a>
+<br>
 <div align="left">
   
 [![view - Documentation](https://img.shields.io/badge/view-Documentation-blue?style=for-the-badge)](../../wiki/ "Go to project documentation")
