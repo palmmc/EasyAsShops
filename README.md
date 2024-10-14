@@ -16,6 +16,9 @@ A plugin that allows you to setup a simple server shop without any programming!
 3) Drag and drop both files ending with `.whl` into your Endstone plugin folder.
 4) Restart or reload your server. Enjoy!
 
+### Demo
+<img src="https://github.com/palmmc/EasyAsShops/blob/main/images/shopdemo.gif?raw=true">
+
 # Features
 - ## Shop UI
   - Category support.
