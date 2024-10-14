@@ -1,12 +1,20 @@
-<img src="https://github.com/palmmc/EasyAsShops/blob/main/badge.png?raw=true" width="128">
+<img src="https://github.com/palmmc/EasyAsShops/blob/main/images/badge.png?raw=true" width="128">
+<a href="https://github.com/legitbox/Economy-Pilot"><img src="https://github.com/palmmc/EasyAsShops/blob/main/images/badge2.png?raw=true" width="256">
+<br><br>
+<div align="left">
+  
+[![view - Documentation](https://img.shields.io/badge/view-Documentation-blue?style=for-the-badge)](../../wiki/ "Go to project documentation")
+
+</div>
 
 # EasyAsShops
 A plugin that allows you to setup a simple server shop without any programming!
 
 # Installation
-1) Download the latest [release](https://github.com/palmmc/EasyAsShops/releases).
-2) Drag and drop the file ending with `.whl` into your Endstone plugin folder.
-3) Restart or reload your server. Enjoy!
+1) Download [**EconomyPilot**](https://github.com/legitbox/Economy-Pilot) (without it, this plugin will not work).
+2) Download the latest [release](https://github.com/palmmc/EasyAsShops/releases).
+3) Drag and drop both files ending with `.whl` into your Endstone plugin folder.
+4) Restart or reload your server. Enjoy!
 
 # Features
 - ## Shop UI
