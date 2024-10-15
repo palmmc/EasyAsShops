@@ -183,7 +183,7 @@ def construct_categories(player: Player, categories):
                 ActionForm.Button(
                     category["title"],
                     category["icon"],
-                    lambda p=player: enter_category(p, category),
+                    lambda p=player, c=category: enter_category(p, c),
                 )
             )
     except Exception as e:
@@ -200,7 +200,7 @@ def construct_category(player: Player, category):
                     ActionForm.Button(
                         subcategory["title"],
                         subcategory["icon"],
-                        lambda p=player: enter_category(p, subcategory),
+                        lambda p=player, s=subcategory: enter_category(p, s),
                     ),
                 )
         if "items" in category:
@@ -256,7 +256,7 @@ def item_info(player: Player, item, category) -> None:
     if item["price"] != 0:
         content += f"§7 - §aPrice: §f${item['price']}\n"
         form.add_button(
-            "Buy", "textures/ui/confirm.png", lambda p=player: buy_item(p, item)
+            "Buy", "textures/ui/confirm.png", lambda p=player, i=item: buy_item(p, item)
         )
     if "value" in item:
         content += f"§7 - §bValue: §f${item['value']}\n"
