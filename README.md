@@ -40,7 +40,7 @@ A plugin for [Endstone](https://github.com/EndstoneMC/endstone) that allows you 
 1) With **operator** or the `easyas.command.editshop` permission, run the `/editshop` command.
 2) This is the first layer of configuration, where you can edit things like the title and content of the UI.
    - Next click "Edit Categories"
-3) Here you can add or remove a cateegory, or edit existing categories by clicking them.
+3) Here you can add or remove a category, or edit existing categories by clicking them.
    - Click the 'Blocks' category to edit it.
 4) Now, inside this category, you can add or remove items and subcategories, as well as edit existing ones.
    - Try adding a new entry for diamonds; use the ID '`minecraft:diamond`', and the path "`textures/items/diamond.png`".
