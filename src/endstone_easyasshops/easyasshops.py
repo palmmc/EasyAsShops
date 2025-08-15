@@ -1,19 +1,13 @@
-from typing import Callable
-from .shop import open_shop, reset_shop, edit_shop
-from endstone._internal.endstone_python import (
-    ColorFormat,
-    Player,
-    RenderType,
-)
+from endstone import ColorFormat, Player
 from endstone.command import Command, CommandSender
-from endstone.event import event_handler
 from endstone.plugin import Plugin
-import json
+
+from .shop import edit_shop, open_shop, reset_shop
 
 
 class EasyAsShops(Plugin):
     prefix = "EasyAsShops"
-    api_version = "0.5"
+    api_version = "0.10"
     load = "POSTWORLD"
 
     commands = {

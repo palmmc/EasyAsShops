@@ -1,24 +1,17 @@
-import typing
-from endstone._internal.endstone_python import (
-    ActionForm,
-    Dropdown,
-    ModalForm,
-    Player,
-    Server,
-    Slider,
-    TextInput,
-)
 import json
 import os
 import re
+import typing
+
+from endstone import Player, Server
+from endstone.form import ActionForm, Button, Dropdown, ModalForm, Slider, TextInput
+from endstone.plugin import Plugin
 
 from .EconomyPilot.database_issuer import (
     server_balance_fetch,
     server_deduct,
     server_pay,
 )
-
-from endstone.plugin import Plugin
 
 ### CHAT CONFIGURATION ###
 
@@ -169,7 +162,7 @@ def construct_buttons(buttons):
     buttonList = []
     try:
         for button in buttons:
-            buttonList.append(ActionForm.Button(button["title"], button["icon"]))
+            buttonList.append(Button(button["title"], button["icon"]))
     except Exception as e:
         logger.error(f"Error: Invalid button format in shop config: {e}")
     return buttonList
@@ -180,7 +173,7 @@ def construct_categories(player: Player, categories):
     try:
         for category in categories:
             categoryList.append(
-                ActionForm.Button(
+                Button(
                     category["title"],
                     category["icon"],
                     lambda p=player, c=category: enter_category(p, c),
@@ -197,7 +190,7 @@ def construct_category(player: Player, category):
         if "subcategories" in category:
             for subcategory in category["subcategories"]:
                 buttonList.append(
-                    ActionForm.Button(
+                    Button(
                         subcategory["title"],
                         subcategory["icon"],
                         lambda p=player, s=subcategory: enter_category(p, s),
@@ -213,7 +206,7 @@ def construct_category(player: Player, category):
                     if player_balance(player, item["currency"]) < item["price"]:
                         priceColor = "§4"
                 buttonList.append(
-                    ActionForm.Button(
+                    Button(
                         f'{item["title"]} §8- {priceColor}${price}',
                         item["icon"],
                         lambda p=player, i=item: item_info(p, i, category),
@@ -406,17 +399,17 @@ def edit_shop(self: Plugin, player: Player):
         title="Edit Shop",
         content="What would you like to edit?",
         buttons=[
-            ActionForm.Button(
+            Button(
                 "Edit Title",
                 "textures/ui/icon_minecoin_9x9",
                 lambda p=player: edit_title(p),
             ),
-            ActionForm.Button(
+            Button(
                 "Edit Content",
                 "textures/ui/icon_minecoin_9x9",
                 lambda p=player: edit_content(p),
             ),
-            ActionForm.Button(
+            Button(
                 "Edit Categories",
                 "textures/ui/icon_minecoin_9x9",
                 lambda p=player: edit_categories(p),
@@ -452,12 +445,12 @@ def edit_categories(player: Player) -> None:
         title="Edit Categories",
         content="What would you like to do?",
         buttons=[
-            ActionForm.Button(
+            Button(
                 "Add Category",
                 "textures/ui/icon_minecoin_9x9",
                 lambda p=player: add_category(p),
             ),
-            ActionForm.Button(
+            Button(
                 "Remove Category",
                 "textures/ui/icon_minecoin_9x9",
                 lambda p=player: remove_category(p),
@@ -528,22 +521,22 @@ def edit_category(player: Player, category) -> None:
         title=f"Edit Category: {category['title']}",
         content="What would you like to do?",
         buttons=[
-            ActionForm.Button(
+            Button(
                 "Add Item",
                 "textures/ui/icon_minecoin_9x9",
                 lambda p=player: add_item(p, category),
             ),
-            ActionForm.Button(
+            Button(
                 "Remove Item",
                 "textures/ui/icon_minecoin_9x9",
                 lambda p=player: remove_item(p, category),
             ),
-            ActionForm.Button(
+            Button(
                 "Add Subcategory",
                 "textures/ui/icon_minecoin_9x9",
                 lambda p=player: add_subcategory(p, category),
             ),
-            ActionForm.Button(
+            Button(
                 "Remove Subcategory",
                 "textures/ui/icon_minecoin_9x9",
                 lambda p=player: remove_subcategory(p, category),
@@ -652,6 +645,8 @@ def add_subcategory_confirm(player: Player, category, result) -> None:
         "icon": result[1],
         "items": [],
     }
+    if "subcategories" not in category:
+        category["subcategories"] = []
     category["subcategories"].append(subcategory)
     write_shop_config(shopData)
     enter_category(player, category)
@@ -662,7 +657,7 @@ def remove_subcategory(player: Player, category) -> None:
     form = ActionForm(
         title="Remove Subcategory", content="Select a subcategory to remove."
     )
-    subcategories = category["subcategories"]
+    subcategories = category.get("subcategories", [])
     for subcategory in subcategories:
         form.add_button(
             subcategory["title"],
